@@ -8,7 +8,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<http:listener doc:name="Listener" doc:id="f5a203cc-7c91-4e8e-a5df-ba4d8a95b0b3" config-ref="HTTP_Listener_config" path="/flowA/{name}"/>
 		<set-variable value='#["I am" ++ " "++ message.attributes.uriParams.name as String]' doc:name="Set Variable" doc:id="8fe9c147-19c3-4045-a9fa-f865663c6089" variableName="flowA_variable"/>
 		<flow-ref doc:name="Flow Reference" doc:id="22f12921-961a-41b4-8516-3595b3566a48" name="FlowQueryParam"/>
-		<set-payload value='#[vars.flowA_variable ++" "++ payload]' doc:name="Set Payload" doc:id="a6035a7b-800a-4cea-ba05-19d6484cc44a" />
 	</flow>
 	<flow name="FlowQueryParam" doc:id="c12d1952-69b4-44c2-a399-98a80598a19f" >
 		<http:listener doc:name="Listener" doc:id="48b4db3a-c7c6-44bb-ad10-52049bb6a93d" config-ref="HTTP_Listener_config" path="/flowB"/>
