@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5f51158f-8ca2-4be1-8343-3c4df0c86ed0" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<http:listener-config name="HTTP_Listener_config1" doc:name="HTTP Listener config" doc:id="c481ea6c-86c9-4a31-8130-20145cbb7e49" basePath="/api" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<flow name="helloworldFlow" doc:id="3a8b90b4-42a5-4adf-a03d-edc04fc56a2c" >
+		<http:listener doc:name="Listener" doc:id="7adebaa8-41ed-43e0-93c0-fe9ac7221901" config-ref="HTTP_Listener_config" path="/demo">
+		</http:listener>
+		<set-variable value='#["I am" ++ " "++ message.attributes.queryParams.name as String]' doc:name="Set Variable" doc:id="924cf9f1-0b0a-4e70-a1c6-7bde97bfc3ff" variableName="var1" />
+		<set-payload value='#[vars.var1 ++ " "]' doc:name="Set Payload" doc:id="16e262fd-2ead-42eb-9b77-10a8b9e981ff" />
+		<logger level="INFO" doc:name="Logger" doc:id="fae8a49f-9b47-495f-a5fb-f2ba8942e565" message="#[vars.var1]" />
+		<set-variable value='#["from city:" ++ " "++ message.attributes.queryParams.city as String]' doc:name="Set Variable" doc:id="c5dd1c16-ede7-45d1-851c-f8c9e5cbaad3" variableName="var2"/>
+		<set-payload value='#[payload ++" "++ vars.var2]' doc:name="Set Payload" doc:id="68d48e4d-0107-4f98-8ed4-0f046e583197" />
+		<logger level="INFO" doc:name="Logger" doc:id="04ca580f-1b3b-47c0-b356-651fa75af9b2" message="#[vars.var2]"/>
+		<set-variable value='#["State :" ++ " " ++ message.attributes.queryParams.state as String]' doc:name="Set Variable" doc:id="6aea2425-41a6-443a-b0c9-391cd2cda50c" variableName="var3"/>
+		<set-payload value='#[payload ++" "++ vars.var3]' doc:name="Set Payload" doc:id="09bd8dac-9706-4ecc-9a9f-4d73afce7d1e" />
+		<logger level="INFO" doc:name="Logger" doc:id="975e6123-d637-4c53-b79c-361680507de7" message="#[vars.var3]"/>
+		<set-variable value='#["and Country :" ++ " " ++ message.attributes.queryParams.country as String]' doc:name="Set Variable" doc:id="94fac79b-d9a0-4121-9382-5a863395addf" variableName="var4"/>
+		<set-payload value='#[payload ++ " "++ vars.var4]' doc:name="Set Payload" doc:id="ddd25286-d28f-4bd9-9d76-9513764d5807" />
+		<logger level="INFO" doc:name="Logger" doc:id="3e139e57-c949-4329-818d-473b3858a384" message="#[payload]"/>
+	</flow>
+	<flow name="helloworldFlow1" doc:id="27d2635a-47a3-4bea-96a9-ffe41588cc1e" >
+		<http:listener doc:name="Listener" doc:id="60122b54-1dfc-47b8-9fa0-92c1ea0219fe" config-ref="HTTP_Listener_config1" path="/demo1"/>
+		<set-payload value='"Hello World"' doc:name="Set Payload" doc:id="78378529-cdc2-48cf-ba7f-2478c5bf0364" />
+	</flow>
+	<flow name="helloworldFlow3" doc:id="efb94713-854f-4f67-8991-4b45578cf9c6" >
+		<http:listener doc:name="Listener" doc:id="37cedc22-8705-4981-aa72-7cb0ed6a716a" config-ref="HTTP_Listener_config" path="/demo1/{state}/{country}" />
+		<set-variable value='#["I am" ++ " "++ message.attributes.queryParams.name as String]' doc:name="Set Variable" doc:id="88c5a78d-652c-4bfa-9d57-6035a6a0846b" variableName="var1" />
+		<set-payload value='#[vars.var1 ++ " "]' doc:name="Set Payload" doc:id="952780e8-6c3f-48d7-af34-785a8b8e4e59" />
+		<logger level="INFO" doc:name="Logger" doc:id="4a3ea824-5abe-4ea0-826d-376cc5a6abe7" message="#[vars.var1]" />
+		<set-variable value='#["from city:" ++ " "++ message.attributes.queryParams.city as String]' doc:name="Set Variable" doc:id="d79c512e-258c-4b3e-91ea-87267492f5b2" variableName="var2" />
+		<set-payload value='#[payload ++" "++ vars.var2]' doc:name="Set Payload" doc:id="0ce6b0db-fa72-4cac-b973-9495a29aec5a" />
+		<logger level="INFO" doc:name="Logger" doc:id="9983b6d2-de75-4db4-b884-8d4bbf9848fa" message="#[vars.var2]" />
+		<set-variable value='#["State :" ++ " " ++ message.attributes.uriParams.state as String]' doc:name="Set Variable" doc:id="fb35d7d4-161f-4e75-9378-495c3154ff84" variableName="var3" />
+		<set-payload value='#[payload ++" "++ vars.var3]' doc:name="Set Payload" doc:id="9b288b66-0997-4b3d-ac7a-2e30e71c80b0" />
+		<logger level="INFO" doc:name="Logger" doc:id="d16c555a-7af7-412e-a533-52bf35d4697e" message="#[vars.var3]" />
+		<set-variable value='#["and Country :" ++ " " ++ message.attributes.uriParams.country as String]' doc:name="Set Variable" doc:id="39107b4e-9497-477a-b669-21576e781f9b" variableName="var4" />
+		<set-payload value='#[payload ++ " "++ vars.var4]' doc:name="Set Payload" doc:id="ead4e303-8580-42df-9ea7-da29b99922f9" />
+		<logger level="INFO" doc:name="Logger" doc:id="99d05f02-ad1a-4cca-ae65-3ec357a19aac" message="#[payload]" />
+	</flow>
+	<flow name="helloworldFlow4" doc:id="2b87b868-db83-4cd0-bd76-0edb663a1948" >
+		<http:listener doc:name="Listener" doc:id="adf9f570-f52d-4526-800f-cb5b2b6363cd" config-ref="HTTP_Listener_config" path="/demo1/{name}" />
+		<set-variable value='#["I am" ++ " "++ message.attributes.uriParams.name as String]' doc:name="Set Variable" doc:id="6f06d2b7-e501-4b97-acc5-14e438edcd5c" variableName="var1" />
+		<set-payload value='#[vars.var1 ++ " "]' doc:name="Set Payload" doc:id="5caf04f4-11f5-4599-800a-8f45cb01c986" />
+		<logger level="INFO" doc:name="Logger" doc:id="dc8e5c0a-1246-46a2-8c71-6521efbdf988" message="#[vars.var1]" />
+		<set-variable value='#["from city:" ++ " "++ message.attributes.queryParams.city as String]' doc:name="Set Variable" doc:id="b29a6ab6-7a19-4378-bbbf-3ace92cbca29" variableName="var2" />
+		<set-payload value='#[payload ++" "++ vars.var2]' doc:name="Set Payload" doc:id="ef0f4d51-6128-4392-81df-7a2c02ed8570" />
+		<logger level="INFO" doc:name="Logger" doc:id="1cfff11c-f3f4-46b8-8ff2-03f200f685ef" message="#[vars.var2]" />
+		<set-variable value='#["State :" ++ " " ++ message.attributes.queryParams.state as String]' doc:name="Set Variable" doc:id="80f22ff4-008e-4f31-bfd0-7f9e169e6ee8" variableName="var3" />
+		<set-payload value='#[payload ++" "++ vars.var3]' doc:name="Set Payload" doc:id="11f474ed-1113-4384-8a9d-8eeb08d96800" />
+		<logger level="INFO" doc:name="Logger" doc:id="c1a1f470-72f2-4afc-a76d-0155070a3dc9" message="#[vars.var3]" />
+		<set-variable value='#["and Country :" ++ " " ++ message.attributes.queryParams.country as String]' doc:name="Set Variable" doc:id="cec81689-b2cf-4235-8b1f-79d207ebb02d" variableName="var4" />
+		<set-payload value='#[payload ++ " "++ vars.var4]' doc:name="Set Payload" doc:id="f8f05496-dce0-43a7-82ab-26cbd477fb92" />
+		<logger level="INFO" doc:name="Logger" doc:id="6ae087cc-126b-431c-913f-6d4d59fbbd76" message="#[payload]" />
+	</flow>
+</mule>
